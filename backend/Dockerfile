@@ -1,0 +1,22 @@
+FROM ruby:3
+
+RUN apt-get update && apt-get install vim -y
+
+RUN useradd -m builder
+RUN mkdir -p /workdir/backend
+RUN chown -R builder /workdir
+RUN chown -R builder /usr/local/bundle 
+
+WORKDIR /workdir/backend
+
+COPY Gemfile* ./
+RUN bundle install
+COPY . .
+
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+EXPOSE 3000
+
+CMD ["/bin/bash"]
