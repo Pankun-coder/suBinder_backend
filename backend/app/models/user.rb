@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+    belongs_to :group
+    
     validates :name, presence:true
 
     VALID_EMAIL = /\A^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}\z/

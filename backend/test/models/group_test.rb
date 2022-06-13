@@ -6,7 +6,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test "set-up group should be valid" do 
-    assert @group.save, "didn't save set-up group"
+    assert @group.save, "did not save set-up group"
   end
 
   test "should not save group without name" do

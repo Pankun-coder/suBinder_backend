@@ -2,7 +2,8 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(name: "Example User", email: "user@mail.com", password: "aaa123", password_confirmation: "aaa123")
+    @group = Group.create(name: "Example group", password:"aaaaa1", password_confirmation:"aaaaa1")
+    @user = @group.users.new(name: "Example User", email: "user@mail.com", password: "aaa123", password_confirmation: "aaa123")
   end
 
   test "set-up user should be valid" do
