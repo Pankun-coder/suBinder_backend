@@ -2,10 +2,10 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(name: "Example User", email: "user@gmail.com", password: "password123")
+    @user = User.new(name: "Example User", email: "user@mail.com", password: "aaa123", password_confirmation: "aaa123")
   end
 
-  test "user info should be like this" do
+  test "set-up user should be valid" do
     assert @user.save, "did not saved set-up user"
   end
 
@@ -33,16 +33,24 @@ class UserTest < ActiveSupport::TestCase
 
   test "password should not be less than 6 chars" do
     @user.password = "a" * 4 + "1"
+    @user.password_confirmation = "a" * 4 + "1"
     assert_not @user.save, "saved user with 5-letter-password"
   end
 
   test "password should not consist of only alphabets" do
     @user.password = "a" * 6
+    @user.password_confirmation = "a" * 6
     assert_not @user.save, "saved user with password which does not contain numbers"
   end
 
   test "password should not consist of only numbers" do
     @user.password = "1" * 6
+    @user.password_confirmation = "1" * 6
     assert_not @user.save, "saved user with password which does not contain alphabets"
   end  
+
+  test "pw and pw_confirmation should be idnetical" do
+    @user.password_confirmation = "aaa1234"
+    assert_not @user.save, "saved User with not identical pw and pw_conf"
+  end
 end

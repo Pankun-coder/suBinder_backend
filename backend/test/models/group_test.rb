@@ -2,16 +2,21 @@ require "test_helper"
 
 class GroupTest < ActiveSupport::TestCase
   def setup 
-    @group = Group.new(name: "name", password: "aaa123", password_confirmation: "aaa123")
+    @group = Group.new(name: "Examle group", password: "aaa123", password_confirmation: "aaa123")
   end
 
-  test "set-up Group should be valid" do 
-    assert @group.save, "didn't save set-up Group"
+  test "set-up group should be valid" do 
+    assert @group.save, "didn't save set-up group"
+  end
+
+  test "should not save group without name" do
+    @group.name = ""
+    assert_not @group.save, "saved group without name"
   end
 
   test "pw and pw_confirmation should be idnetical" do
     @group.password_confirmation = "aaa1234"
-    assert_not @group.save, "saved Group with not identical pw and pw_conf"
+    assert_not @group.save, "saved group with not identical pw and pw_conf"
   end
 
   test "password should not be less than 6 chars" do
