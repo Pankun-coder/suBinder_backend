@@ -17,7 +17,7 @@ module Api
             end
             private
                 def group_params
-                    params.require(:group).permit(:name, :password, :password_confirmation, :password_digest)
+                    params.require(:group).permit(:name, :password, :password_confirmation)
                 end
             end 
     end
