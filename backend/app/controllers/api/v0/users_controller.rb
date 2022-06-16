@@ -8,11 +8,19 @@ module Api
                 end
 
                 @group = Group.find(params[:group][:id])
-                if @group.authenticate(params[:group][:password])
-                    render json: {message: "you're in"}
-                else
-                    render json: {message: "wrong password"}
+                if !@group.authenticate(params[:group][:password])
+                    render json: {message: "wrong password for the group"} and return
                 end
+
+                @user = @group.users.new(user_params)
+                if @user.save
+                    render json: {message: "user saved"}
+                end
+                puts user_params
+            end
+            private
+            def user_params
+                params.require(:user).permit(:name, :email, :password, :password_confirmation)
             end
         end
     end
