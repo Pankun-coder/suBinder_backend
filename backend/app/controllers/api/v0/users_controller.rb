@@ -15,6 +15,8 @@ module Api
                 @user = @group.users.new(user_params)
                 if @user.save
                     render json: {message: "user saved"}
+                else
+                    render json: {message: "user did not saved"}
                 end
                 puts user_params
             end
