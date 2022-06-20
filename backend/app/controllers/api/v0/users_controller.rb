@@ -2,7 +2,6 @@ module Api
     module V0
         class UsersController < ApplicationController
             def create
-                puts :params
                 if !Group.exists?(id: params[:group][:id])
                     render json: {massage: "invalid id"} and return
                 end
