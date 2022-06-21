@@ -2,11 +2,14 @@ module Api
     module V0
         class GroupsController < ApplicationController
             def index
-                group_ids = []
-                Group.all.each {|group|
-                    group_ids.push(group.id)
-                }
-                render json: {group_ids: group_ids}
+                puts params
+                if session[:user_id]
+                    puts session[:user_id]
+                    user = User.find_by(id: session[:user_id])
+                    render json: { message: "you're logged in", group: user.group.name}
+                else
+                    render json: { message: "you are not logged in" }
+                end
             end
             def create
                 @group = Group.new(group_params)
@@ -23,7 +26,7 @@ module Api
                 @group = Group.find(params[:id])
                 render json: {group: {name: @group.name}, message:"group loaded"}
             end
-            
+                     
             private
                 def group_params
                     params.require(:group).permit(:name, :password, :password_confirmation)
