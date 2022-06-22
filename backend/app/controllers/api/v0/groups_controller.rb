@@ -2,9 +2,7 @@ module Api
     module V0
         class GroupsController < ApplicationController
             def index
-                puts params
                 if session[:user_id]
-                    puts session[:user_id]
                     user = User.find_by(id: session[:user_id])
                     render json: { message: "you're logged in", group: user.group.name}
                 else

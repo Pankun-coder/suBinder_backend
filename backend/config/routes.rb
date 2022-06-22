@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       resources :groups
       resources :users
       resources :sessions
+      get "/students/search", to: "students#search"
     end
   end
 end
