@@ -6,6 +6,9 @@ Rails.application.routes.draw do
       resources :users
       resources :sessions
       get "/students/search", to: "students#search"
+      resources :students
+      get "/class_availabilities/search", to: "class_availabilities#search"
+      resources :class_availabilities
     end
   end
 end

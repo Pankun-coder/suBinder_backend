@@ -6,7 +6,7 @@ module Api
                     user = User.find_by(id: session[:user_id])
                     render json: { message: "you're logged in", group: user.group.name}
                 else
-                    render json: { message: "you are not logged in" }
+                    render json: { errors: "era-", "status": 404}
                 end
             end
             def create

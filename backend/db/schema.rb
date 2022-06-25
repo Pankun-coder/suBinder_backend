@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_13_072929) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_23_021157) do
+  create_table "class_availabilities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "from"
+    t.datetime "to"
+    t.bigint "group_id"
+    t.bigint "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_class_availabilities_on_group_id"
+    t.index ["student_id"], name: "index_class_availabilities_on_student_id"
+  end
+
   create_table "groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "password_digest"
@@ -36,6 +47,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_072929) do
     t.index ["group_id"], name: "index_users_on_group_id"
   end
 
+  add_foreign_key "class_availabilities", "groups"
+  add_foreign_key "class_availabilities", "students"
   add_foreign_key "students", "groups"
   add_foreign_key "users", "groups"
 end

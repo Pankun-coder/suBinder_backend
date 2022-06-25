@@ -1,11 +1,9 @@
 module Api
     module V0
         class StudentsController < ApplicationController
-            def search
-                if !session[:user_id]
-                    render json: { message: "you are not logged in"} and return
-                end
+            before_action :is_logged_in
 
+            def search
                 nums_only = /\A\d*\z/
                 start_with_query = /^#{params[:query]}/
 
@@ -17,16 +15,26 @@ module Api
                     possible_students = group.students.where("name LIKE ?", "#{params[:query]}%").limit(5)
                 end
 
-                suggestions = {}
-                index = 0
+                suggestions = []
                 possible_students.each do |student|
-                    suggestions[index] = { name: student.name, id: student.id}
-                    index += 1;
+                    suggestions.push({ name: student.name, id: student.id})
                 end
                 
-                render json: { "suggestions": suggestions }
+                render json: suggestions
             end
 
+
+            def show
+                group = User.find_by(id: session[:user_id]).group
+            end
+
+
+            private
+                def is_logged_in
+                    if !session[:user_id]
+                        render json: { message: "you are not logged in"} and return
+                    end
+                end
         end
     end
 end
