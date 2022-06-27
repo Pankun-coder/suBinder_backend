@@ -22,8 +22,15 @@ module Api
                 
                 render json: suggestions
             end
-
-
+            
+            def index
+                group = User.find_by(id: session[:user_id]).group
+                students_info = []
+                group.students.all.each do |student|
+                    students_info.push({ name: student.name, id: student.id})
+                end
+                render json: students_info
+            end
             def show
                 group = User.find_by(id: session[:user_id]).group
             end
