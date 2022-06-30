@@ -31,15 +31,22 @@ module Api
                 end
                 render json: students_info
             end
+
             def show
-                group = User.find_by(id: session[:user_id]).group
+                user = User.find_by(id: session[:user_id])
+                student = Student.find_by(id: params[:id])
+                if student && student.group == user.group
+                    render json: { student: { name: student.name, id: student.id }}, status: 200
+                else
+                    render json: {message: "エラー"}, status: 400
+                end
             end
 
 
             private
                 def is_logged_in
                     if !session[:user_id]
-                        render json: { message: "you are not logged in"} and return
+                        render json: { message: "you are not logged in"}, status: 403 and return
                     end
                 end
         end

@@ -20,31 +20,32 @@ module Api
                 end
                 render json: result and return
             end
+            
             def update
                 group = User.find_by(id: session[:user_id]).group
                 availability = ClassAvailability.find_by(id: params[:id])
-                student = Student.find_by(id: params[:user_id])
+                student = Student.find_by(id: params[:student_id])
                 if availability.student == nil
                     if availability.group == group
                         availability.student = student
                     else
-                        render json: {message: "管轄外の予約です"} and return
+                        render json: { message: "権限のない予約です" }, status: 403 and return
                     end
                 else
-                    render json: {message: "already reserved"} and return
+                    render json: { message: "すでに予約されています" }, status: 400 and return
                 end
 
                 if availability.save
-                    render json: {message: "reserved"} and return
+                    render json: { message: "予約しました" } and return
                 else
-                    render json: {message: "error"} and return
+                    render json: { message: "エラーが発生しました" }, status: 500 and return
                 end
             end
                 
             private
                 def is_logged_in
                     if !session[:user_id]
-                        render json: { message: "you are not logged in"} and return
+                        render json: { message: "you are not logged in" }, status: 401 and return
                     end
                 end
 
