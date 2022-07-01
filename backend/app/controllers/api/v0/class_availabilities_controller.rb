@@ -25,14 +25,18 @@ module Api
                 group = User.find_by(id: session[:user_id]).group
                 availability = ClassAvailability.find_by(id: params[:id])
                 student = Student.find_by(id: params[:student_id])
-                if availability.student == nil
-                    if availability.group == group
-                        availability.student = student
-                    else
-                        render json: { message: "権限のない予約です" }, status: :forbidden and return
-                    end
+                if availability.group == group
+                    availability.student = student
                 else
+                    render json: { message: "権限のない予約です" }, status: :forbidden and return
+                end
+                
+                if availability.student != nil
                     render json: { message: "すでに予約されています" }, status: :bad_request and return
+                end
+                
+                if ClassAvailability.where(from: availability.from, to: availability.to, student: student).length != 0
+                    render json: { message: "すでに同じ時間に予約が入っています"}, status: :bad_request and return
                 end
 
                 if availability.save
@@ -45,7 +49,7 @@ module Api
             private
                 def is_logged_in
                     if !session[:user_id]
-                        render json: { message: "you are not logged in" }, status: 401 and return
+                        render json: { message: "ログインが必要なリクエストです" }, status: :forbidden and return
                     end
                 end
 
