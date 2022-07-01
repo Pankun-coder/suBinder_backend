@@ -29,16 +29,16 @@ module Api
                     if availability.group == group
                         availability.student = student
                     else
-                        render json: { message: "権限のない予約です" }, status: 403 and return
+                        render json: { message: "権限のない予約です" }, status: :forbidden and return
                     end
                 else
-                    render json: { message: "すでに予約されています" }, status: 400 and return
+                    render json: { message: "すでに予約されています" }, status: :bad_request and return
                 end
 
                 if availability.save
                     render json: { message: "予約しました" } and return
                 else
-                    render json: { message: "エラーが発生しました" }, status: 500 and return
+                    render json: { message: "エラーが発生しました" }, status: :internal_server_error and return
                 end
             end
                 

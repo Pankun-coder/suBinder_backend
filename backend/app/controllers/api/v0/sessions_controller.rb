@@ -8,7 +8,7 @@ module Api
                     session[:user_id] = user.id
                     render json: {message: "authenticated"}
                 else
-                    render json: "aiueo", status: 200
+                    render json: {message: "パスワードまたはメールアドレスが正しくありません"}, status: :bad_request
                 end
             
 

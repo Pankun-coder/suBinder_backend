@@ -1,24 +1,23 @@
 module Api
-    module V0
+    module V0end
         class UsersController < ApplicationController
             def create
                 if !Group.exists?(id: params[:group][:id])
-                    render json: {massage: "invalid id"} and return
+                    render json: {massage: "グループのIDが無効です"}, status: :not_found  and return
                 end
 
-                @group = Group.find(params[:group][:id])
-                if !@group.authenticate(params[:group][:password])
-                    render json: {message: "wrong password for the group"} and return
+                group = Group.find(params[:group][:id])
+                if !group.authenticate(params[:group][:password])
+                    render json: {message: "グループのパスワードが違います"}, status: :unauthorized and return
                 end
 
-                @user = @group.users.new(user_params)
-                if @user.save
-                    session[:user_id] = @user.id
+                user = group.users.new(user_params)
+                if user.save
+                    session[:user_id] = user.id
                     render json: {message: "user saved"}
                 else
-                    render json: {message: "user did not saved"}
+                    render json: {message: "ユーザー情報に誤りがあります"}, status: :bad_request
                 end
-                puts user_params
             end
             private
             def user_params

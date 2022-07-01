@@ -6,23 +6,23 @@ module Api
                     user = User.find_by(id: session[:user_id])
                     render json: { message: "you're logged in", group: user.group.name}
                 else
-                    render json: { errors: "era-", "status": 404}
+                    render json: { message: "エラー"}, status: :bad_request
                 end
             end
             def create
-                @group = Group.new(group_params)
-                if @group.save
+                group = Group.new(group_params)
+                if group.save
                     render json: {message: "success"}
                 else
-                    render json: {message: "fail"}
+                    render json: {message: "fail"}, status: :bad_request
                 end 
             end
             def show
                 if !Group.exists?(id: params[:id])
-                    render json: {massage: "invalid id"} and return
+                    render json: {massage: "invalid id"}, status: :not_found and return
                 end
-                @group = Group.find(params[:id])
-                render json: {group: {name: @group.name}, message:"group loaded"}
+                group = Group.find(params[:id])
+                render json: {group: {name: group.name}, message:"group loaded"}
             end
                      
             private
