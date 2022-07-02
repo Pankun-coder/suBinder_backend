@@ -55,8 +55,7 @@ module Api
                 class_starts_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:from][:hour], params[:time][:from][:min])
                 class_ends_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:to][:hour], params[:time][:to][:min])
                 lastDay = Time.zone.local(params[:to][:year], params[:to][:month], params[:to][:day]).tomorrow
-                puts params[:from][:year].class
-                puts "aaa".to_i
+
                 while class_starts_at < lastDay
                     if params[:days][class_starts_at.wday]
                         params[:how_many].to_i.times do
