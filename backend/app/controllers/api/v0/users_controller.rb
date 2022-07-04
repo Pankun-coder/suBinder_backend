@@ -1,5 +1,5 @@
 module Api
-    module V0end
+    module V0
         class UsersController < ApplicationController
             def create
                 if !Group.exists?(id: params[:group][:id])
