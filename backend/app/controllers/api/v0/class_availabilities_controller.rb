@@ -47,7 +47,7 @@ module Api
             
             def create
                 group = User.find_by(id: session[:user_id]).group
-                if !is_valid_date(params[:from]) || !is_valid_date(params[:to]) ##ここ！！！！！！
+                if !is_valid_date(params[:from]) || !is_valid_date(params[:to])
                     render json: {message: "invalid date"} and return
                 end
                 class_starts_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:from][:hour], params[:time][:from][:min])
@@ -59,7 +59,6 @@ module Api
                         params[:how_many].to_i.times do
                             av = group.class_availabilities.new(from: class_starts_at, to: class_ends_at)
                             av.save
-                            puts av
                         end
                     end
                     class_starts_at = class_starts_at.tomorrow
