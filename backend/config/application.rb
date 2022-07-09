@@ -25,11 +25,10 @@ module Backend
     config.time_zone = "Asia/Tokyo"
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins "http://localhost:3000", "http://192.168.0.8:3000"
-        
+        origins "http://localhost:3000", "http://192.168.0.8:3000", "http://192.168.0.10:3000"
         resource "*",
           headers: :any,
-          methods: [:get, :post, :options, :head, :patch],
+          methods: [:get, :post, :options, :head, :patch, :delete],
           credentials: true
       end
     end

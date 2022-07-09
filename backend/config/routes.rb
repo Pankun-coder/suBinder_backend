@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     namespace "v0" do
       resources :groups
       resources :users
+      delete "/sessions/logout", to: "sessions#logout"
       resources :sessions
       get "/students/search", to: "students#search"
       resources :students
