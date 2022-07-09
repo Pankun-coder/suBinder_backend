@@ -22,6 +22,16 @@ module Api
                 
                 render json: suggestions
             end
+
+            def create
+                group = User.find_by(id: session[:user_id]).group
+                student = group.students.new(student_params)
+                if student.save
+                    render json: { message: "ユーザーが作成されました。ID: #{student.id}"}
+                else
+                    render json: { message: "ユーザーの作成に失敗しました。"}
+                end
+            end
             
             def index
                 group = User.find_by(id: session[:user_id]).group
@@ -42,12 +52,15 @@ module Api
                 end
             end
 
-
             private
                 def is_logged_in
                     if !session[:user_id]
-                        render json: { message: "you are not logged in"}, status: 403 and return
+                        render json: { message: "ログインが必要なアクセスです"}, status: 403 and return
                     end
+                end
+
+                def student_params
+                    params.require(:student).permit(:name)
                 end
         end
     end
