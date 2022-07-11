@@ -24,31 +24,42 @@ module Api
             def update
                 group = User.find_by(id: session[:user_id]).group
                 availability = ClassAvailability.find_by(id: params[:id])
-                if availability.student != nil
-                    render json: { message: "すでに予約されています" }, status: :bad_request and return
+                if !availability
+                    render json: { message: "予約情報が不正です"}, status: :not_found and return
                 end
-                student = Student.find_by(id: params[:student_id])
-                if availability.group == group
-                    availability.student = student
-                else
+                if availability.group != group
                     render json: { message: "権限のない予約です" }, status: :forbidden and return
                 end
-                
-                if ClassAvailability.where(from: availability.from, to: availability.to, student: student).length != 0
-                    render json: { message: "すでに同じ時間に予約が入っています"}, status: :bad_request and return
-                end
 
-                if availability.save
-                    render json: { message: "予約しました" } and return
-                else
-                    render json: { message: "エラーが発生しました" }, status: :internal_server_error and return
+                if params[:cancel] == "false"
+                    if availability.student != nil
+                        render json: { message: "すでに予約されています" }, status: :bad_request and return
+                    end
+                    student = Student.find_by(id: params[:student_id])
+                    availability.student = student
+                    if ClassAvailability.where(from: availability.from, to: availability.to, student: student).length != 0
+                        render json: { message: "すでに同じ時間に予約が入っています"}, status: :bad_request and return
+                    end
+
+                    if availability.save
+                        render json: { message: "予約しました" } and return
+                    else
+                        render json: { message: "予約に失敗しました" }, status: :internal_server_error and return
+                    end
+
+                elsif params[:cancel] == "true"
+                    availability.student = nil
+                    if availability.save
+                        render json: { message: "予約をキャンセルしました" } and return
+                    end
+                    render json: { message: "キャンセルに失敗しました"}, status: :bad_request and return
                 end
             end
             
             def create
                 group = User.find_by(id: session[:user_id]).group
                 if !is_valid_date(params[:from]) || !is_valid_date(params[:to])
-                    render json: {message: "invalid date"} and return
+                    render json: {message: "日付が不正です"}, status: :bad_request and return
                 end
                 class_starts_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:from][:hour], params[:time][:from][:min])
                 class_ends_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:to][:hour], params[:time][:to][:min])
