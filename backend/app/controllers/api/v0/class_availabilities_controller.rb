@@ -87,14 +87,18 @@ module Api
                     end
                 end
 
-                def is_valid_date(dateInJSON)
-                    if dateInJSON[:year].to_i < 2000 || dateInJSON[:year].to_i > 3000
+                def is_valid_date(date_in_JSON)
+                    nums_only = /\A\d*\z/
+                    if !(date_in_JSON[:year].match(nums_only) && date_in_JSON[:month].match(nums_only) && date_in_JSON[:day].match(nums_only))
                         return false
                     end
-                    if dateInJSON[:month].to_i < 1 || dateInJSON[:month].to_i > 12
+                    if date_in_JSON[:year].to_i < 2000 || date_in_JSON[:year].to_i > 3000
                         return false
                     end
-                    if dateInJSON[:day].to_i < 1 || dateInJSON[:day].to_i > Time.zone.local(dateInJSON[:year], dateInJSON[:month]).end_of_month.day
+                    if date_in_JSON[:month].to_i < 1 || date_in_JSON[:month].to_i > 12
+                        return false
+                    end
+                    if date_in_JSON[:day].to_i < 1 || date_in_JSON[:day].to_i > Time.zone.local(date_in_JSON[:year], date_in_JSON[:month]).end_of_month.day
                         return false
                     end
                     return true
