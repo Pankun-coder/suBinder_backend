@@ -64,17 +64,25 @@ module Api
                 if !is_valid_time(params[:time][:from]) || !is_valid_time(params[:time][:to])
                     render json: { message: "時刻が不正です" }, status: :bad_request and return
                 end
+                if !is_int(params[:how_many])
+                    render json: { message: "枠数の情報が不正です"}, status: :bad_request and return
+                end
+                if params[:how_many] > 100
+                    render json: { message: "100人分以上の予約は一度に作れません"}, status: :bad_request and return
+                end
+                day = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day])
                 class_starts_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:from][:hour], params[:time][:from][:min])
                 class_ends_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:to][:hour], params[:time][:to][:min])
                 lastDay = Time.zone.local(params[:to][:year], params[:to][:month], params[:to][:day]).tomorrow
 
-                while class_starts_at < lastDay
+                while day < lastDay
                     if params[:days][class_starts_at.wday]
-                        params[:how_many].to_i.times do
+                        params[:how_many].times do
                             av = group.class_availabilities.new(from: class_starts_at, to: class_ends_at)
                             av.save
                         end
                     end
+                    day = day.tomorrow
                     class_starts_at = class_starts_at.tomorrow
                     class_ends_at = class_ends_at.tomorrow
                 end
