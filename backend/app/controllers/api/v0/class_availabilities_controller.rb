@@ -61,6 +61,9 @@ module Api
                 if !is_valid_date(params[:from]) || !is_valid_date(params[:to])
                     render json: {message: "日付が不正です"}, status: :bad_request and return
                 end
+                if !is_valid_time(params[:time][:from]) || !is_valid_time(params[:time][:to])
+                    render json: { message: "時刻が不正です" }, status: :bad_request and return
+                end
                 class_starts_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:from][:hour], params[:time][:from][:min])
                 class_ends_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:to][:hour], params[:time][:to][:min])
                 lastDay = Time.zone.local(params[:to][:year], params[:to][:month], params[:to][:day]).tomorrow
@@ -88,23 +91,40 @@ module Api
                 end
 
                 def is_valid_date(date_in_JSON)
-                    nums_only = /\A\d*\z/
-                    if !(date_in_JSON[:year].match(nums_only) && date_in_JSON[:month].match(nums_only) && date_in_JSON[:day].match(nums_only))
+                    if !(is_int(date_in_JSON[:year]) && is_int(date_in_JSON[:month]) && is_int(date_in_JSON[:day]))
                         return false
                     end
-                    if date_in_JSON[:year].to_i < 2000 || date_in_JSON[:year].to_i > 3000
+                    if date_in_JSON[:year] < 2000 || date_in_JSON[:year] > 3000
                         return false
                     end
-                    if date_in_JSON[:month].to_i < 1 || date_in_JSON[:month].to_i > 12
+                    if date_in_JSON[:month] < 1 || date_in_JSON[:month] > 12
                         return false
                     end
-                    if date_in_JSON[:day].to_i < 1 || date_in_JSON[:day].to_i > Time.zone.local(date_in_JSON[:year], date_in_JSON[:month]).end_of_month.day
+                    if date_in_JSON[:day] < 1 || date_in_JSON[:day] > Time.zone.local(date_in_JSON[:year], date_in_JSON[:month]).end_of_month.day
                         return false
                     end
                     return true
                 end
-                    
+                def is_valid_time(time_in_JSON)
+                    if !(is_int(time_in_JSON[:hour]) && is_int(time_in_JSON[:min]))
+                        return false
+                    end
+                    if time_in_JSON[:hour] < 0 || time_in_JSON[:hour] > 23
+                        return false
+                    end
+                    if time_in_JSON[:min] < 0 || time_in_JSON[:min] > 59
+                        return false
+                    end
+                    return true
+                end
 
+                def is_int(object)
+                    if object.class == Integer
+                        return true
+                    else
+                        return false
+                    end
+                end
         end
     end
 end
