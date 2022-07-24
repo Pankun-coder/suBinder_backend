@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_23_021157) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_24_053023) do
   create_table "class_availabilities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "from"
     t.datetime "to"
@@ -22,11 +22,28 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_23_021157) do
     t.index ["student_id"], name: "index_class_availabilities_on_student_id"
   end
 
+  create_table "courses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.bigint "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_courses_on_group_id"
+  end
+
   create_table "groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "steps", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "step_order"
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_steps_on_course_id"
   end
 
   create_table "students", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -49,6 +66,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_23_021157) do
 
   add_foreign_key "class_availabilities", "groups"
   add_foreign_key "class_availabilities", "students"
+  add_foreign_key "courses", "groups"
+  add_foreign_key "steps", "courses"
   add_foreign_key "students", "groups"
   add_foreign_key "users", "groups"
 end

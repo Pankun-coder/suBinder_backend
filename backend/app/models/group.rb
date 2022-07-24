@@ -2,6 +2,7 @@ class Group < ApplicationRecord
     has_many :users
     has_many :students
     has_many :class_availabilities
+    has_many :courses
     validates :name, presence:true
     
     has_secure_password
