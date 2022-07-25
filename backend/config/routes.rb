@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       get "/class_availabilities/search", to: "class_availabilities#search"
       resources :class_availabilities
       resources :courses
+      get "progresses/search", to: "progresses#search"
+      resources :progresses
     end
   end
 end
