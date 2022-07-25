@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :students
       get "/class_availabilities/search", to: "class_availabilities#search"
       resources :class_availabilities
+      resources :courses
     end
   end
 end
