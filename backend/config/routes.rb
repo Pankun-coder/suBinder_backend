@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :class_availabilities
       resources :courses
       get "progresses/search", to: "progresses#search"
+      patch "progresses/bulk_update", to: "progresses#bulk_update"
       resources :progresses
     end
   end
