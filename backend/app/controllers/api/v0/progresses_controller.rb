@@ -3,9 +3,7 @@ module Api
   module V0
     class ProgressesController < ApplicationController
       before_action :is_logged_in
-      def index
-        puts params
-      end
+
       def search
         if !params[:student_id]
           render json: { message: "生徒IDは必須です" }, status: :bad_request and return 
@@ -25,7 +23,8 @@ module Api
           end
           progresses_JSON[progress.step.course.id][:steps][progress.step.step_order] = {
              name: progress.step.name, 
-             isCompleted: progress.is_completed
+             isCompleted: progress.is_completed,
+             id: progress.id
             }
         end
         render json: { progresses: progresses_JSON }, status: :ok and return
