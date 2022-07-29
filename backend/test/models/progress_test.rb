@@ -19,4 +19,9 @@ class ProgressTest < ActiveSupport::TestCase
     progresses(:one).is_completed = nil
     assert_not progresses(:one).save, "progress saved without is_completed info"
   end
+
+  test "progress should not save with identical student and identical step" do
+    progresses(:one).save
+    assert_not Progress.new(student: progresses(:one).student, step: progresses(:one).step).save, "progress saved with identical student and identical step"
+  end
 end
