@@ -14,11 +14,36 @@ module Api
           progress = Progress.find_by(id: progress_data[:id])
           progress[:is_completed] = progress_data[:is_completed]
           if !progress.save
-            render json: { message: "進捗情報が不正ですbb" }, status: :bad_request and return
+            render json: { message: "進捗情報が不正です" }, status: :bad_request and return
           end
         end
         render json: { message: "正常に保存されました" }, status: :ok and return
       end
+      def bulk_create
+        group = User.find_by(session[:user_id]).group
+        student = Student.find_by(id: params[:student_id])
+        if !student || student.group != group
+          render json: { message: "生徒IDが無効です" }, status: :not_found and return
+        end
+        course = Course.find_by(id: params[:course_id])
+        if !course || course.group != group
+          render json: { message: "コースIDが無効です" }, status: :not_found and return
+        end
+        progresses = []
+        course.steps.each do |step|
+          progresses.push(Progress.new(student: student, step: step))
+          if progress.save
+            next
+          else
+            progresses.each do |progress|
+              progress.destroy
+            end
+            render json: { message: "コースの登録に失敗しました" }, status: :bad_request and return
+          end
+        end
+        render json: { message: "コースが正常に登録されました" }, status: :ok and return
+      end
+
       def search
         if !params[:student_id]
           render json: { message: "生徒IDは必須です" }, status: :bad_request and return 

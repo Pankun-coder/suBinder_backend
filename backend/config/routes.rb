@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :courses
       get "progresses/search", to: "progresses#search"
       patch "progresses/bulk_update", to: "progresses#bulk_update"
+      post "progresses/bulk_create", to: "progresses#bulk_create"
       resources :progresses
     end
   end
