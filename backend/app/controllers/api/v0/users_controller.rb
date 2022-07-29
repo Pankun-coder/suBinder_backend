@@ -16,7 +16,7 @@ module Api
                     session[:user_id] = user.id
                     render json: {message: "user saved"}
                 else
-                    render json: {message: "ユーザー情報に誤りがあります"}, status: :bad_request
+                    render json: {message: user.errors.full_messages }, status: :bad_request
                 end
             end
             private

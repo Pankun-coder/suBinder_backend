@@ -14,7 +14,7 @@ module Api
           progress = Progress.find_by(id: progress_data[:id])
           progress[:is_completed] = progress_data[:is_completed]
           if !progress.save
-            render json: { message: "進捗情報が不正です" }, status: :bad_request and return
+            render json: { message: progress.errors.full_messages }, status: :bad_request and return
           end
         end
         render json: { message: "正常に保存されました" }, status: :ok and return
@@ -38,7 +38,7 @@ module Api
             progresses.each do |progress|
               progress.destroy
             end
-            render json: { message: "コースの登録に失敗しました" }, status: :bad_request and return
+            render json: { message: progresses[-1].errors.full_messages }, status: :bad_request and return
           end
         end
         render json: { message: "コースが正常に登録されました" }, status: :ok and return

@@ -16,7 +16,7 @@ module Api
         course = group.courses.new(name: params[:course][:name])
         puts params[:course][:name]
         if !course.save
-          render json: { message: "教材の登録に失敗しました" }, status: :bad_request and return
+          render json: { message: course.errors.full_messages }, status: :bad_request and return
         end
         puts params[:steps].class
         params[:steps].each do |required_step|
@@ -28,7 +28,7 @@ module Api
               step.destroy
             end
             course.destroy
-            render json: { message: "ステップの登録に失敗しました" }, status: :bad_request and return
+            render json: { message: step.errors.full_messages }, status: :bad_request and return
           end
         end
         render json: { message: "教材が正常に登録されました" }, status: :ok and return

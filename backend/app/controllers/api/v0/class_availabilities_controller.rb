@@ -44,7 +44,7 @@ module Api
                     if availability.save
                         render json: { message: "予約しました" } and return
                     else
-                        render json: { message: "予約に失敗しました" }, status: :internal_server_error and return
+                        render json: { message: availability.errors.full_messages }, status: :internal_server_error and return
                     end
 
                 elsif params[:cancel] == "true"
@@ -52,7 +52,7 @@ module Api
                     if availability.save
                         render json: { message: "予約をキャンセルしました" } and return
                     end
-                    render json: { message: "キャンセルに失敗しました"}, status: :bad_request and return
+                    render json: { message: availability.errors.full_messages }, status: :bad_request and return
                 end
             end
             

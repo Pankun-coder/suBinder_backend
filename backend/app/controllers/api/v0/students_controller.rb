@@ -29,7 +29,7 @@ module Api
                 if student.save
                     render json: { message: "ユーザーが作成されました。ID: #{student.id}"}
                 else
-                    render json: { message: "ユーザーの作成に失敗しました。"}, status: :bad_request
+                    render json: { message: student.errors.full_messages }, status: :bad_request
                 end
             end
             

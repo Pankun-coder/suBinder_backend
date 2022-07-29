@@ -14,7 +14,7 @@ module Api
                 if group.save
                     render json: {message: "success"}
                 else
-                    render json: {message: "fail"}, status: :bad_request
+                    render json: { message: group.errors.full_messages }, status: :bad_request
                 end 
             end
             def show

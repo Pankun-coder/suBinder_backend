@@ -1,0 +1,43 @@
+ja:
+  activerecord:
+    models:
+      class_availability: 予約枠情報
+      course: コース
+      group: 組織
+      progress: 進捗状況
+      step: ステップ
+      student: 生徒
+      user: ユーザー
+    attributes:
+      class_availability:
+        group: 組織
+        student: 予約生徒
+      course:
+        group: 組織
+        name: コース名
+        steps: ステップ
+      group:
+        class_availability: 予約枠情報
+        course: コース
+        name: グループ名
+        password: パスワード
+        password_confirmation: 確認パスワード
+        student: 生徒
+        user: ユーザー
+      progress:
+        is_completed: 進捗情報
+        step: ステップ
+        student: 生徒
+      step:
+        course: コース
+        name: ステップ名
+        step_order: 順序
+      student:
+        group: グループ
+        name: 生徒名
+      user:
+        email: メールアドレス
+        group: グループ
+        name: ユーザー名
+        password: パスワード
+        password_confirmation: 確認パスワード
