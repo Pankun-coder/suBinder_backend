@@ -20,7 +20,7 @@ module Api
         render json: { message: "正常に保存されました" }, status: :ok and return
       end
       def bulk_create
-        group = User.find_by(session[:user_id]).group
+        group = User.find_by(id: session[:user_id]).group
         student = Student.find_by(id: params[:student_id])
         if !student || student.group != group
           render json: { message: "生徒IDが無効です" }, status: :not_found and return
@@ -31,8 +31,8 @@ module Api
         end
         progresses = []
         course.steps.each do |step|
-          progresses.push(Progress.new(student: student, step: step))
-          if progress.save
+          progresses.push(Progress.new(student: student, step: step, is_completed: false))
+          if progresses[-1].save
             next
           else
             progresses.each do |progress|
