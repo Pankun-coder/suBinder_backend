@@ -3,6 +3,14 @@ module Api
   module V0
     class CoursesController < ApplicationController
       before_action :is_logged_in
+      def index
+        group = User.find_by(id: session[:user_id]).group
+        courseInfo = []
+        group.courses.each do |course|
+          courseInfo.push({id: course[:id], name: course[:name]})
+        end
+      render json: { courses: courseInfo }, status: :ok and return
+      end
       def create
         group = User.find(session[:user_id]).group
         course = group.courses.new(name: params[:course][:name])
