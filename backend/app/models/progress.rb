@@ -3,4 +3,5 @@ class Progress < ApplicationRecord
   belongs_to :step
 
   validates :is_completed, inclusion: [true, false]
+  validates :step, uniqueness: { scope: :student_id }
 end
