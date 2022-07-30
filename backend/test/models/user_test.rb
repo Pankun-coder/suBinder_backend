@@ -33,8 +33,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "password should not be less than 6 chars" do
-    @user.password = "a" * 4 + "1"
-    @user.password_confirmation = "a" * 4 + "1"
+    @user.password = ("a" * 4) + "1"
+    @user.password_confirmation = ("a" * 4) + "1"
     assert_not @user.save, "saved user with 5-letter-password"
   end
 

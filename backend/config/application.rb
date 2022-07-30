@@ -27,9 +27,9 @@ module Backend
       allow do
         origins "http://localhost:3000", "http://192.168.0.8:3000", "http://192.168.0.10:3000"
         resource "*",
-          headers: :any,
-          methods: [:get, :post, :options, :head, :patch, :delete],
-          credentials: true
+                 headers: :any,
+                 methods: [:get, :post, :options, :head, :patch, :delete],
+                 credentials: true
       end
     end
     

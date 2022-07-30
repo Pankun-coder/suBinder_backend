@@ -1,8 +1,7 @@
 class Step < ApplicationRecord
   belongs_to :course
 
-  validates :name, presence: true,
-                  uniqueness: { scope: :course_id} 
+  validates :name, presence: true
   validates :step_order, uniqueness: { scope: :course_id }
 
   before_create :autofill_step_order

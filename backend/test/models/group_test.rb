@@ -20,7 +20,7 @@ class GroupTest < ActiveSupport::TestCase
   end
 
   test "password should not be less than 6 chars" do
-    @group.password = "a" * 4 + "1"
+    @group.password = ("a" * 4) + "1"
     assert_not @group.save, "saved group with 5-letter-password"
   end
 

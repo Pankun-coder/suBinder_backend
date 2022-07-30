@@ -14,11 +14,10 @@ module Api
       def create
         group = User.find(session[:user_id]).group
         course = group.courses.new(name: params[:course][:name])
-        puts params[:course][:name]
         if !course.save
           render json: { message: course.errors.full_messages }, status: :bad_request and return
         end
-        puts params[:steps].class
+
         params[:steps].each do |required_step|
           step = course.steps.new(name: required_step[:name])
           if step.save
@@ -35,11 +34,11 @@ module Api
       end
 
       private
-        def is_logged_in
-          if !session[:user_id]
-              render json: { message: "ログインが必要なアクセスです"}, status: :forbidden and return
-          end
+      def is_logged_in
+        if !session[:user_id]
+          render json: { message: "ログインが必要なアクセスです"}, status: :forbidden and return
         end
+      end
     end
   end
 end

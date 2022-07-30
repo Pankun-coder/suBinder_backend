@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_24_080551) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_30_054113) do
   create_table "class_availabilities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "from"
     t.datetime "to"
@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_24_080551) do
     t.bigint "step_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["step_id", "student_id"], name: "index_progresses_on_step_id_and_student_id", unique: true
     t.index ["step_id"], name: "index_progresses_on_step_id"
     t.index ["student_id"], name: "index_progresses_on_student_id"
   end
@@ -54,6 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_24_080551) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_steps_on_course_id"
+    t.index ["step_order", "course_id"], name: "index_steps_on_step_order_and_course_id", unique: true
   end
 
   create_table "students", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -71,6 +73,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_24_080551) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id"
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["group_id"], name: "index_users_on_group_id"
   end
 

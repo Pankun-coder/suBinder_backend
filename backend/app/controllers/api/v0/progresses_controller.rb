@@ -25,10 +25,12 @@ module Api
         if !student || student.group != group
           render json: { message: "生徒IDが無効です" }, status: :not_found and return
         end
+
         course = Course.find_by(id: params[:course_id])
         if !course || course.group != group
           render json: { message: "コースIDが無効です" }, status: :not_found and return
         end
+
         progresses = []
         course.steps.each do |step|
           progresses.push(Progress.new(student: student, step: step, is_completed: false))
@@ -48,10 +50,12 @@ module Api
         if !params[:student_id]
           render json: { message: "生徒IDは必須です" }, status: :bad_request and return 
         end
+
         student = Student.find_by(id: params[:student_id])
         if !student || student.group != User.find(session[:user_id]).group
           render json: { message: "生徒情報が無効です" }, status: :not_found and return
         end
+
         progresses_JSON = {}
         progresses = student.progresses.all
         progresses.each do |progress|
@@ -73,7 +77,7 @@ module Api
       private
       def is_logged_in
         if !session[:user_id]
-            render json: { message: "ログインが必要なアクセスです"}, status: :forbidden and return
+          render json: { message: "ログインが必要なアクセスです"}, status: :forbidden and return
         end
       end
     end
