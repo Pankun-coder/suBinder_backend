@@ -8,11 +8,11 @@
 
 cobra = Group.create(name: "Cobra Kai", password: "aaa111")
 
-johnny = cobra.users.create(name: "Johnny Lawrence", email: "johnny@karate.com", password: "aaa111")
+cobra.users.create(name: "Johnny Lawrence", email: "johnny@karate.com", password: "aaa111")
 
 student_names = ["Miguel Diaz", "Hawk", "Aisha Robinson"]
 student_names.each do |name|
-  student = cobra.students.create(name: name)
+  cobra.students.create(name: name)
 end
 
 current_time = Time.zone.now

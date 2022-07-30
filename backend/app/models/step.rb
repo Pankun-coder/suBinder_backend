@@ -17,5 +17,4 @@ class Step < ApplicationRecord
       end
     end
   end
-
 end

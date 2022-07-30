@@ -1,8 +1,7 @@
-
 module Api
   module V0
     class ProgressesController < ApplicationController
-      before_action :is_logged_in
+      before_action :logged_in?
       def bulk_update
         params[:progresses].each do |progress_data|
           progress = Progress.find_by(id: progress_data[:id])
@@ -19,6 +18,7 @@ module Api
         end
         render json: { message: "正常に保存されました" }, status: :ok and return
       end
+
       def bulk_create
         group = User.find_by(id: session[:user_id]).group
         student = Student.find_by(id: params[:student_id])
@@ -40,7 +40,7 @@ module Api
             progresses.each do |progress|
               progress.destroy
             end
-            render json: { message: progresses[-1].errors.full_messages }, status: :bad_request and return
+            render json: { message: progresses[-1].errors.full_messages }, status: :bad_request and return nil
           end
         end
         render json: { message: "コースが正常に登録されました" }, status: :ok and return
@@ -48,7 +48,7 @@ module Api
 
       def search
         if !params[:student_id]
-          render json: { message: "生徒IDは必須です" }, status: :bad_request and return 
+          render json: { message: "生徒IDは必須です" }, status: :bad_request and return
         end
 
         student = Student.find_by(id: params[:student_id])
@@ -61,23 +61,24 @@ module Api
         progresses.each do |progress|
           if !progresses_JSON[progress.step.course.id]
             progresses_JSON[progress.step.course.id] = {
-              name: progress.step.course.name, 
+              name: progress.step.course.name,
               steps: Array.new(progress.step.course.steps.all.length, nil)
             }
           end
           progresses_JSON[progress.step.course.id][:steps][progress.step.step_order] = {
-             name: progress.step.name, 
-             isCompleted: progress.is_completed,
-             id: progress.id
-            }
+            name: progress.step.name,
+            isCompleted: progress.is_completed,
+            id: progress.id
+          }
         end
         render json: { progresses: progresses_JSON }, status: :ok and return
       end
 
       private
-      def is_logged_in
+
+      def logged_in?
         if !session[:user_id]
-          render json: { message: "ログインが必要なアクセスです"}, status: :forbidden and return
+          render json: { message: "ログインが必要なアクセスです" }, status: :forbidden and return
         end
       end
     end

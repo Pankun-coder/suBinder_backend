@@ -11,7 +11,7 @@ class StepTest < ActiveSupport::TestCase
     assert @step.save, "set-up step did not save"
   end
 
-  test "step should not save without course" do 
+  test "step should not save without course" do
     @step.course = nil
     assert_not @step.save, "step saved without course"
   end
@@ -38,7 +38,7 @@ class StepTest < ActiveSupport::TestCase
 
   test "step_order should be auto-filled if not given" do
     @step.save
-    another_step = @course.steps.create(name:"another step")
+    another_step = @course.steps.create(name: "another step")
     assert another_step.step_order == @step.step_order + 1, "autfilling step_order seems not working correctly"
   end
 

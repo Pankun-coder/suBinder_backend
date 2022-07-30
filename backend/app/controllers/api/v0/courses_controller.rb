@@ -1,16 +1,16 @@
-
 module Api
   module V0
     class CoursesController < ApplicationController
-      before_action :is_logged_in
+      before_action :logged_in?
       def index
         group = User.find_by(id: session[:user_id]).group
         courseInfo = []
         group.courses.each do |course|
-          courseInfo.push({id: course[:id], name: course[:name]})
+          courseInfo.push({ id: course[:id], name: course[:name] })
         end
-      render json: { courses: courseInfo }, status: :ok and return
+        render json: { courses: courseInfo }, status: :ok and return
       end
+
       def create
         group = User.find(session[:user_id]).group
         course = group.courses.new(name: params[:course][:name])
@@ -23,8 +23,8 @@ module Api
           if step.save
             next
           else
-            course.steps.each do |step|
-              step.destroy
+            course.steps.each do |saved_step|
+              saved_step.destroy
             end
             course.destroy
             render json: { message: step.errors.full_messages }, status: :bad_request and return
@@ -34,9 +34,10 @@ module Api
       end
 
       private
-      def is_logged_in
+
+      def logged_in?
         if !session[:user_id]
-          render json: { message: "ログインが必要なアクセスです"}, status: :forbidden and return
+          render json: { message: "ログインが必要なアクセスです" }, status: :forbidden and return
         end
       end
     end

@@ -2,7 +2,7 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @group = Group.create(name: "Example group", password:"aaaaa1", password_confirmation:"aaaaa1")
+    @group = Group.create(name: "Example group", password: "aaaaa1", password_confirmation: "aaaaa1")
     @user = @group.users.new(name: "Example User", email: "user@mail.com", password: "aaa123", password_confirmation: "aaa123")
   end
 
@@ -48,7 +48,7 @@ class UserTest < ActiveSupport::TestCase
     @user.password = "1" * 6
     @user.password_confirmation = "1" * 6
     assert_not @user.save, "saved user with password which does not contain alphabets"
-  end  
+  end
 
   test "pw and pw_confirmation should be idnetical" do
     @user.password_confirmation = "aaa1234"

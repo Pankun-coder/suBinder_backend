@@ -32,14 +32,12 @@ module Backend
                  credentials: true
       end
     end
-    
-    config.i18n.default_locale = :ja
 
+    config.i18n.default_locale = :ja
 
     config.api_only = true
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
     config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware
-
   end
 end

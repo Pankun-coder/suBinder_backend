@@ -1,11 +1,11 @@
 require "test_helper"
 
 class GroupTest < ActiveSupport::TestCase
-  def setup 
+  def setup
     @group = Group.new(name: "Examle group", password: "aaa123", password_confirmation: "aaa123")
   end
 
-  test "set-up group should be valid" do 
+  test "set-up group should be valid" do
     assert @group.save, "did not save set-up group"
   end
 
@@ -32,5 +32,5 @@ class GroupTest < ActiveSupport::TestCase
   test "password should not consist of only numbers" do
     @group.password = "1" * 6
     assert_not @group.save, "saved group with password which does not contain alphabets"
-  end  
+  end
 end

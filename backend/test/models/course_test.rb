@@ -19,7 +19,7 @@ class CourseTest < ActiveSupport::TestCase
     @course.name = nil
     assert_not @course.save, "course saved without name"
   end
-  
+
   test "course's name should be unique in its group" do
     @course.name = "identical name"
     @course.save
