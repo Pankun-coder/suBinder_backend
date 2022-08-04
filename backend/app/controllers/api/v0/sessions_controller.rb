@@ -2,8 +2,6 @@ module Api
   module V0
     class SessionsController < ApplicationController
       def index
-        puts cookies.signed[:user_id]
-        puts "------"
         if cookies.signed[:user_id] && User.find_by(id: cookies.signed[:user_id])
           render json: { isLoggedIn: true }
         else
