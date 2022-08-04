@@ -6,7 +6,7 @@ module Api
       def search
         nums_only = /\A\d*\z/
 
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
 
         if params[:query].match(nums_only)
           possible_students = group.students.where("id LIKE ?", "#{params[:query]}%").limit(5)
@@ -23,7 +23,7 @@ module Api
       end
 
       def create
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
         student = group.students.new(student_params)
         if student.save
           render json: { message: "ユーザーが作成されました。ID: #{student.id}" }
@@ -33,7 +33,7 @@ module Api
       end
 
       def index
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
         students_info = []
         group.students.all.each do |student|
           students_info.push({ name: student.name, id: student.id })
@@ -42,7 +42,7 @@ module Api
       end
 
       def show
-        user = User.find_by(id: session[:user_id])
+        user = User.find_by(id: cookies.signed[:user_id])
         student = Student.find_by(id: params[:id])
         if student && student.group == user.group
           render json: { student: { name: student.name, id: student.id } }, status: :ok
@@ -54,7 +54,7 @@ module Api
       private
 
       def logged_in?
-        if !session[:user_id]
+        if !cookies.signed[:user_id]
           render json: { message: "ログインが必要なアクセスです" }, status: :forbidden and return
         end
       end

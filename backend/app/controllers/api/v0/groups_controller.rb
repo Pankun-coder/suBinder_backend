@@ -2,8 +2,8 @@ module Api
   module V0
     class GroupsController < ApplicationController
       def index
-        if session[:user_id]
-          user = User.find_by(id: session[:user_id])
+        if cookies.signed[:user_id]
+          user = User.find_by(id: cookies.signed[:user_id])
           render json: { message: "you're logged in", group: user.group.name }
         else
           render json: { message: "エラー" }, status: :bad_request

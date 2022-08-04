@@ -5,7 +5,7 @@ module Api
       def bulk_update
         params[:progresses].each do |progress_data|
           progress = Progress.find_by(id: progress_data[:id])
-          if progress.student.group != User.find_by(id: session[:user_id]).group
+          if progress.student.group != User.find_by(id: cookies.signed[:user_id]).group
             render json: { message: "権限のない進捗情報です" }, status: :forbidden and return
           end
         end
@@ -20,7 +20,7 @@ module Api
       end
 
       def bulk_create
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
         student = Student.find_by(id: params[:student_id])
         if !student || student.group != group
           render json: { message: "生徒IDが無効です" }, status: :not_found and return
@@ -52,7 +52,7 @@ module Api
         end
 
         student = Student.find_by(id: params[:student_id])
-        if !student || student.group != User.find(session[:user_id]).group
+        if !student || student.group != User.find(cookies.signed[:user_id]).group
           render json: { message: "生徒情報が無効です" }, status: :not_found and return
         end
 
@@ -77,7 +77,7 @@ module Api
       private
 
       def logged_in?
-        if !session[:user_id]
+        if !cookies.signed[:user_id]
           render json: { message: "ログインが必要なアクセスです" }, status: :forbidden and return
         end
       end

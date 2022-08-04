@@ -2,7 +2,9 @@ module Api
   module V0
     class SessionsController < ApplicationController
       def index
-        if session[:user_id] && User.find_by(id: session[:user_id])
+        puts cookies.signed[:user_id]
+        puts "------"
+        if cookies.signed[:user_id] && User.find_by(id: cookies.signed[:user_id])
           render json: { isLoggedIn: true }
         else
           render json: { isLoggedIn: false }
@@ -12,7 +14,7 @@ module Api
       def create
         user = User.find_by(email: params[:user][:email])
         if user && user.authenticate(params[:user][:password])
-          session[:user_id] = user.id
+          cookies.signed[:user_id] = { value: user.id, same_site: "Strict", expires: 1.hour.from_now }
           render json: { message: "authenticated" }
         else
           render json: { message: "パスワードまたはメールアドレスが正しくありません" }, status: :bad_request
@@ -20,7 +22,7 @@ module Api
       end
 
       def logout
-        session.delete(:user_id)
+        cookies.delete :user_id
       end
     end
   end

@@ -4,7 +4,7 @@ module Api
       before_action :logged_in?
 
       def search
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
         month_and_year = Time.zone.local(params[:year], params[:month])
         availabilities_for_month = group.class_availabilities.where(from: month_and_year.all_month)
         result = {}
@@ -22,7 +22,7 @@ module Api
       end
 
       def update
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
         availability = ClassAvailability.find_by(id: params[:id])
         if !availability
           render json: { message: "予約情報が不正です" }, status: :not_found and return
@@ -59,7 +59,7 @@ module Api
       end
 
       def create
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
         if !valid_date?(params[:from]) || !valid_date?(params[:to])
           render json: { message: "日付が不正です" }, status: :bad_request and return
         end
@@ -95,7 +95,7 @@ module Api
       private
 
       def logged_in?
-        if !session[:user_id]
+        if !cookies.signed[:user_id]
           render json: { message: "ログインが必要なリクエストです" }, status: :forbidden and return
         end
       end

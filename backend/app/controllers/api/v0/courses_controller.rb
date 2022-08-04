@@ -3,7 +3,7 @@ module Api
     class CoursesController < ApplicationController
       before_action :logged_in?
       def index
-        group = User.find_by(id: session[:user_id]).group
+        group = User.find_by(id: cookies.signed[:user_id]).group
         courseInfo = []
         group.courses.each do |course|
           courseInfo.push({ id: course[:id], name: course[:name] })
@@ -12,7 +12,7 @@ module Api
       end
 
       def create
-        group = User.find(session[:user_id]).group
+        group = User.find(cookies.signed[:user_id]).group
         course = group.courses.new(name: params[:course][:name])
         if !course.save
           render json: { message: course.errors.full_messages }, status: :bad_request and return
@@ -36,7 +36,7 @@ module Api
       private
 
       def logged_in?
-        if !session[:user_id]
+        if !cookies.signed[:user_id]
           render json: { message: "ログインが必要なアクセスです" }, status: :forbidden and return
         end
       end
