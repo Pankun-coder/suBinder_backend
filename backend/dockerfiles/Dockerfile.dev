@@ -9,7 +9,7 @@ RUN chown -R builder /usr/local/bundle
 
 WORKDIR /workdir/backend
 
-COPY Gemfile* ./
+COPY ./Gemfile* ./
 RUN bundle install
 COPY . .
 
