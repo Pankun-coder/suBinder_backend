@@ -13,7 +13,7 @@ module Api
       def create
         group = Group.new(group_params)
         if group.save
-          render json: { message: "success" }
+          render json: { message: "success", group_id: group.id }
         else
           render json: { message: group.errors.full_messages }, status: :bad_request
         end
