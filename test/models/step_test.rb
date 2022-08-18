@@ -21,13 +21,6 @@ class StepTest < ActiveSupport::TestCase
     assert_not @step.save, "step saved without name"
   end
 
-  test "step shold not save with name already used in course" do
-    @step.name = "identical name"
-    @step.save
-    another_step = @course.steps.new(name: "identical name", step_order: 1)
-    assert_not another_step.save, "step saved with not distinct name in course"
-  end
-
   test "step name uniqueness must be forced in same course" do
     @step.name = "identical name"
     @step.save
