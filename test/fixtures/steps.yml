@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  step_order: 1
+  name: step1
+  step_order: 0
   course: one
 
-two:
-  name: MyString
+for_testing_progress:
+  name: step2
   step_order: 1
-  course: two
+  course: one

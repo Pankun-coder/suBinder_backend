@@ -2,7 +2,7 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @group = Group.create(name: "Example group", password: "aaaaa1", password_confirmation: "aaaaa1")
+    @group = groups(:one)
     @user = @group.users.new(name: "Example User", email: "user@mail.com", password: "aaa123", password_confirmation: "aaa123")
   end
 

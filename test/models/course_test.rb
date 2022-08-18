@@ -2,7 +2,7 @@ require "test_helper"
 
 class CourseTest < ActiveSupport::TestCase
   def setup
-    @group = Group.create(name: "example group", password: "abc123", password_confirmation: "abc123")
+    @group = groups(:one)
     @course = @group.courses.new(name: "test course")
   end
 

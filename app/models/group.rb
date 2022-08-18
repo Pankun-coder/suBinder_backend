@@ -8,8 +8,7 @@ class Group < ApplicationRecord
   has_secure_password
   CONTAIN_NUM = /.*\d.*/
   CONTAIN_ALPHABET = /.*[A-Za-z].*/
-  validates :password, presence: true,
-                       length: { minimum: 6 }
+  validates :password, length: { minimum: 6 }
   validates :password, format: { with: CONTAIN_NUM }
   validates :password, format: { with: CONTAIN_ALPHABET }
 end
