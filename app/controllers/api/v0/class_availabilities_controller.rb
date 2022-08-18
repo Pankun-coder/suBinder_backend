@@ -74,20 +74,17 @@ module Api
         end
 
         day = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day])
-        class_starts_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:from][:hour], params[:time][:from][:min])
-        class_ends_at = Time.zone.local(params[:from][:year], params[:from][:month], params[:from][:day], params[:time][:to][:hour], params[:time][:to][:min])
+
         lastDay = Time.zone.local(params[:to][:year], params[:to][:month], params[:to][:day]).tomorrow
 
         while day < lastDay
-          if params[:days][class_starts_at.wday]
+          if params[:days][day.wday]
             params[:how_many].times do
-              av = group.class_availabilities.new(from: class_starts_at, to: class_ends_at)
+              av = group.class_availabilities.new(from: set_time(day, params[:time][:from]), to: set_time(day, params[:time][:to]))
               av.save
             end
           end
           day = day.tomorrow
-          class_starts_at = class_starts_at.tomorrow
-          class_ends_at = class_ends_at.tomorrow
         end
         render json: { message: "正常に保存されました" }, status: :ok and return
       end
@@ -137,6 +134,11 @@ module Api
         else
           return false
         end
+      end
+
+      def set_time(date, time)
+        time_in_str = "#{time[:hour]}:#{time[:min]}:00"
+        return Time.zone.parse(date.to_s.sub(/\d\d:\d\d:\d\d/, time_in_str))
       end
     end
   end
