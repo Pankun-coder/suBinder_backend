@@ -3,25 +3,6 @@ module Api
     class StudentsController < ApplicationController
       before_action :logged_in?
 
-      def search
-        nums_only = /\A\d*\z/
-
-        group = User.find_by(id: cookies.signed[:user_id]).group
-
-        if params[:query].match(nums_only)
-          possible_students = group.students.where("id LIKE ?", "#{params[:query]}%").limit(5)
-        else
-          possible_students = group.students.where("name LIKE ?", "#{params[:query]}%").limit(5)
-        end
-
-        suggestions = []
-        possible_students.each do |student|
-          suggestions.push({ name: student.name, id: student.id })
-        end
-
-        render json: suggestions
-      end
-
       def create
         group = User.find_by(id: cookies.signed[:user_id]).group
         student = group.students.new(student_params)
