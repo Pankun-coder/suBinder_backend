@@ -51,5 +51,7 @@ test:
 production:
   <<: *default
   database: backend_production
-  username: backend
-  password: <%= ENV["BACKEND_DATABASE_PASSWORD"] %>
+  username: <%= Rails.application.credentials.production.database.user_id %>
+  password: <%= Rails.application.credentials.production.database.user_password %>
+  host: <%= Rails.application.credentials.production.database.endpoint %>
+  port: <%= Rails.application.credentials.production.database.port %>
