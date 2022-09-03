@@ -1,0 +1,15 @@
+FROM ruby:3
+
+RUN mkdir /backend
+
+WORKDIR /backend
+
+COPY ./Gemfile* ./
+RUN bundle install
+COPY . .
+
+RUN chmod 744 ./start.sh
+
+EXPOSE 80
+
+CMD ["./start.sh"]
