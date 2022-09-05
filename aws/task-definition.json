@@ -1,0 +1,36 @@
+{
+  "family": "carte-back",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "carte-back",
+      "image": "carte-back",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "secrets": [
+        {
+          "name": "RAILS_MASTER_KEY",
+          "valueFrom": "/e-carte/rails-master-key"
+        },
+        {
+          "name": "FRONTEND_ORIGIN",
+          "valueFrom": "/e-carte/frontend-load-balancer-origin"
+        }
+      ]
+    }
+  ],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "requiresCompatibilities": ["FARGATE"],
+  "executionRoleArn": "carteBackendDeployRole",
+  "cpu": "256",
+  "memory": "512"
+}
