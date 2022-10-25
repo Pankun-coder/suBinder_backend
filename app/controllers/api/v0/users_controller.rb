@@ -13,7 +13,6 @@ module Api
 
         user = group.users.new(user_params)
         if user.save
-          cookies.signed[:user_id] = { value: user.id, same_site: "Strict", expires: 1.hour.from_now }
           render json: { message: "user saved" }
         else
           render json: { message: user.errors.full_messages }, status: :bad_request
