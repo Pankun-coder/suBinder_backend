@@ -13,5 +13,9 @@ Rails.application.routes.draw do
       patch "progresses/bulk_update", to: "progresses#bulk_update"
       post "progresses/bulk_create", to: "progresses#bulk_create"
     end
+    namespace "v1" do
+      get "/class_availabilities/search", to: "class_availabilities#search"
+      resources :class_availabilities, only: [:update, :create]
+    end
   end
 end
