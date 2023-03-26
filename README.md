@@ -4,7 +4,7 @@
 ## 概要
 
 [https://www.sub-binder.com](https://www.sub-binder.com "サイトURL")  
-
+*閉鎖中
 ![ランディングページ](https://github.com/Pankun-coder/github-images/blob/main/suBinder/screenshots/pc_landing-page.png)
 趣味の教室運営向けに作った、生徒の予約、進捗状況を管理できるアプリです。  
 教室登録・ユーザー登録をすると、
